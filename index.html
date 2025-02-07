@@ -8,15 +8,16 @@
         body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
         button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
         #result { margin-top: 20px; font-size: 18px; font-weight: bold; }
+        textarea { width: 80%; height: 200px; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <h1>Teste de API</h1>
-    <input type="text" id="urlInput" placeholder="Digite a URL">
+    <input type="text" id="urlInput" placeholder="Digite a URL" style="width: 80%; padding: 10px;">
     <button onclick="fetchData()">Buscar</button>
     
-    <p id="result">Nenhum dado ainda.</p>
+    <textarea id="result" readonly placeholder="Aqui aparecerá a resposta da API..."></textarea>
 
     <script>
         async function fetchData() {
@@ -24,39 +25,25 @@
             const resultElement = document.getElementById('result');
 
             if (!urlInput) {
-                resultElement.textContent = "Erro: Digite uma URL!";
+                resultElement.value = "Erro: Digite uma URL!";
                 return;
             }
 
-            resultElement.textContent = "Aguardando resposta...";
+            resultElement.value = "Aguardando resposta...";
 
             try {
-                // Construir a URL para a API com a URL fornecida
-                const const apiUrl = `https://seu-projeto.vercel.app/api/rekonise?url=${encodeURIComponent(urlInput)}`;
+                const apiUrl = `https://seu-projeto.vercel.app/rekonise?url=${encodeURIComponent(urlInput)}`;
 
-                console.log(`URL da requisição: ${apiUrl}`);  // Log para depuração
-
-                // Fazer a requisição para a API
                 const response = await fetch(apiUrl);
-                console.log(response);  // Log para verificar a resposta da API
 
-                // Verificar se a resposta foi bem-sucedida
                 if (!response.ok) {
                     throw new Error(`Erro HTTP: ${response.status}`);
                 }
 
-                // Tentar obter a resposta JSON
                 const data = await response.json();
-                console.log(data);  // Log para mostrar a resposta JSON
-
-                if (data.result) {
-                    resultElement.textContent = `Resultado: ${data.result}`;
-                } else {
-                    resultElement.textContent = "Erro: Link errado ou erro na API";
-                }
+                resultElement.value = JSON.stringify(data, null, 2);  // Exibe a resposta JSON formatada
             } catch (error) {
-                console.error("Erro ao conectar com a API:", error);  // Log do erro
-                resultElement.textContent = `Erro: ${error.message || "Não foi possível conectar à API"}`;
+                resultElement.value = `Erro: ${error.message || "Não foi possível conectar à API"}`;
             }
         }
     </script>
