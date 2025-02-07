@@ -2,14 +2,15 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/run.js",
+      "src": "api/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/run-shell",
-      "dest": "api/run.js"
+      "src": "/rekonise",
+      "dest": "api/index.js"
     }
   ]
 }
+
